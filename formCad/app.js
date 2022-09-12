@@ -131,12 +131,12 @@ function createComponents(frm){
    
    edit = createInput("Telemovel", "Telemóvel")
    edit.maxLength = 9
-   edit.onkeypress = nomberOnlyEvent
+   edit.onkeypress = numberOnlyEvent
    frm.appendChild(createDivGroup(ctrlSmallA, edit))
 
    /*edit = createInput("Telefone", "Telefone")
    edit.maxLength = 9
-   edit.onkeypress = nomberOnlyEvent
+   edit.onkeypress = numberOnlyEvent
    frm.appendChild(createDivGroup(class4, edit)) */
    //\\\\
 
@@ -166,7 +166,7 @@ function createComponents(frm){
 
    edit = createInput("AnoBat", "(ex:2000)")
    edit.maxLength = 4
-   edit.onkeypress = nomberOnlyEvent
+   edit.onkeypress = numberOnlyEvent
    frm.appendChild(createDivGroup(ctrlSmallA, edit, "Ano Batismo"))
    frm.appendChild(createGroup(ctrlSmallA, "Profiss", "Profissão"))
 
