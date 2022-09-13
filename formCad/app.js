@@ -20,7 +20,6 @@ function createCtrlFoto(container){
    imgDlg.onchange = function(event) {
       let files = event.target.files;
       if (files.length != 1) {
-         alert('Selecione um arquivo');
          return;
       }
       let file = files[0];
@@ -86,13 +85,14 @@ function createHeader(frm){
    div = div.appendChild(document.createElement("div"))  
    //div.style.backgroundColor = "red"
    div.style.height = "100%" 
-   let label = div.appendChild(document.createElement("label"))
-   label.innerHTML = "Foto" 
-   label.classList = "form-label"
-   div = div.appendChild(document.createElement("div"))
+   //let label = div.appendChild(document.createElement("label"))
+   //label.innerHTML = "Foto" 
+   //label.classList = "form-label"
+   //div = div.appendChild(document.createElement("div"))
    createCtrlFoto(div) 
    div.classList = "img-thumbnail"
-   div.style.height = "calc(100% - var(--bs-gutter-y)*2)"
+   //div.style.height = "calc(100% - var(--bs-gutter-y)*2)"
+   div.style.height = "100%"
    //img.onclick           
 }        
 function CreateButtom(title){
@@ -170,11 +170,39 @@ function createComponents(frm){
    frm.appendChild(createDivGroup(ctrlSmallA, edit, "Ano Batismo"))
    frm.appendChild(createGroup(ctrlSmallA, "Profiss", "Profissão"))
 
-   edit = createSelect("EstCivil",["CASADO(A)", "DIVORCIADO(A)", "SOLTEIRO(A)", "VIUVO(A)"])
-   frm.appendChild(createDivGroup(ctrlSmallA,edit,"Estado Civil"))
+   edit = createInput("EstCivil", "Estado Civil")
+   const editNomeConj = createInput("NomeConj", "Nome Conjuge")
+   editNomeConj.disabled = true
+   let  editNomeConjTextSaved = ""
+   const EstCivilList = "EstCivilList"
+   edit.setAttribute("list", EstCivilList)
+   let list = document.createElement("datalist")
+   list.id = EstCivilList
+   let listValues = ["Casado", "Casada", "Divorciado", "Divorciada", "Solteiro", "Solteira", "Viuvo", "Viuva"]
+   for (let i in listValues) {
+      let v = document.createElement("option");
+      v.value = listValues[i];
+      list.appendChild(v);
+   }
+   frm.appendChild(createDivGroup(ctrlSmallA, edit))
+   frm.appendChild(list)
+   edit.onchange = (event)=>{
+      const r = "casad"
+      let t = event.target.value.trim()
+      let s = t.toLowerCase()
+      if(s.length < r.length || s.substring(0, r.length) != r){
+         if (!editNomeConj.disabled){
+            editNomeConjTextSaved = editNomeConj.value
+            editNomeConj.disabled = true
+         }
+         editNomeConj.value = t        
+      } else if (editNomeConj.disabled){
+         editNomeConj.disabled = false
+         editNomeConj.value = editNomeConjTextSaved
+      } 
+   }
 
-   //frm.appendChild(createGroup(ctrlSmallA, "EstCivil", "Estado Civil"))
-   frm.appendChild(createGroup(class12, "NomeConj", "Nome Conjuge"))
+   frm.appendChild(createDivGroup(class12, editNomeConj))
    frm.appendChild(createGroup(class12, "NomePai", "Nome Pai"))
    frm.appendChild(createGroup(class12, "NomeMae", "Nome Mãe"))
               
