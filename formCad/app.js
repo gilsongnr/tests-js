@@ -174,16 +174,8 @@ function createComponents(frm){
    const editNomeConj = createInput("NomeConj", "Nome Conjuge")
    editNomeConj.disabled = true
    let  editNomeConjTextSaved = ""
-   const EstCivilList = "EstCivilList"
-   edit.setAttribute("list", EstCivilList)
-   let list = document.createElement("datalist")
-   list.id = EstCivilList
-   let listValues = ["Casado", "Casada", "Divorciado", "Divorciada", "Solteiro", "Solteira", "Viuvo", "Viuva"]
-   for (let i in listValues) {
-      let v = document.createElement("option");
-      v.value = listValues[i];
-      list.appendChild(v);
-   }
+   let list = createDataList("EstCivilList", ["Casado", "Casada", "Divorciado", "Divorciada", "Solteiro", "Solteira", "Viuvo", "Viuva"])
+   edit.setAttribute("list", list.id)
    frm.appendChild(createDivGroup(ctrlSmallA, edit))
    frm.appendChild(list)
    edit.onchange = (event)=>{

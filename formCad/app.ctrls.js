@@ -95,3 +95,11 @@ function createSelect(name, options, values){
    }            
    return input
 } 
+function createDataList(id, values){ 
+   let list = document.createElement("datalist")
+   list.id = id
+   for (let i in values) {
+      list.appendChild(document.createElement("option")).value = values[i];;
+   }  
+   return list 
+} 
