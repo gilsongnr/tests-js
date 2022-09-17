@@ -1,3 +1,5 @@
+"use strict"   
+
 const class12 = "col-12"
 const class9 = "col-12 col-md-9 col-xl-6"
 const class6 = "col-12 col-sm-8 col-md-6"
@@ -103,3 +105,60 @@ function createDataList(id, values){
    }  
    return list 
 } 
+
+function createModal(){   
+   let modal = document.createElement("div")
+   modal.classList = "modal fade"
+   modal.id="exampleModal" 
+   modal.setAttribute("tabindex", "-1" )
+   modal.setAttribute("aria-labelledby", "exampleModalLabel")
+   modal.ariaHidden="true"
+   let div = modal.appendChild(document.createElement("div"))
+   div.classList="modal-dialog"
+   let content = div.appendChild(document.createElement("div"))
+   content.classList="modal-content"
+   let header = content.appendChild(document.createElement("div"))
+   header.classList="modal-header"
+   let h =header.appendChild(document.createElement("h5"))
+   h.classList= "modal-title"
+   h.id="exampleModalLabel"
+   h.innerHTML ="Modal título"
+   
+   h=header.appendChild(document.createElement("button"))
+   h.type="button"
+   h.classList="btn-close";
+   h.setAttribute('data-bs-dismiss', "modal")
+   h.setAttribute('aria-label', "Close")
+   
+   h = content.appendChild(document.createElement("div"))
+   h.classList = "modal-body"
+   h.innerHTML = "teste ... teste"
+   document.body.appendChild(modal)
+   h = content.appendChild(document.createElement("div"))
+   h.classList = "modal-footer"
+   let b = h.appendChild(document.createElement("button"))
+   b.type="button"
+   b.classList="btn btn-secondary"
+   b.setAttribute('data-bs-dismiss', 'modal')
+   b.innerHTML = "Close"
+   b = h.appendChild(document.createElement("button"))
+   b.type="button"
+   b.classList="btn btn-primary"
+   //b.setAttribute('data-bs-dismiss', 'modal')
+   b.innerHTML = "Salvar alterações"
+   //alert(modal.outerHTML)
+   b = document.body.appendChild(document.createElement("button"))
+   b.type="button"
+   b.classList="btn btn-primary"
+   //b.setAttribute("data-bs-toggle", "modal")
+   //b.setAttribute("data-bs-target", "#exampleModal")
+   b.innerHTML = "modal dad"
+   b.onclick = ()=>{
+      var myModal = new bootstrap.Modal(modal, {
+               keyboard: false
+               })
+      myModal.toggle()
+      //alert("teste")
+      //modal.toggle()
+   }
+}

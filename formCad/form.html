@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+      <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet"/>
+      <title>Ficha de Membro</title>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+     
+      <style>
+         h3{
+            background-color: lightblue;
+            text-align: center;
+         }
+         h5{
+            text-align: center;
+         }
+      </style>
+   </head>   
+   <body class="p-3 m-0 border-0 bd-example">
+      <form class="row g-3" id="frm" action="./sp2" method="post" style="max-width:70rem;margin:auto;">
+         <input type="hidden" value="{key}" name="key"/>
+         <div class="col-12 p-2">
+            <h3>FICHA DE MEMBRO</h3>
+            <h5>(<span id="hNameText"></span>)</h5>
+         </div>
+      </form>
+      <script>
+         "use strict"
+         const class12 = "col-12"
+         const class9 = "col-sm-9"
+         const class6 = "col-12 col-md-6"
+         const class4 = "col-12 col-sm-6 col-md-4 col-xl-3"
+         const class3 = "col-md-3 col-sm-6"
+         const class9x = "col-md-9 col-sm-8"
+         const class3x = "col-md-3 col-sm-4"
+         const class4s = "col-lg-4 col-md-4 col-sm-4"
+         
+         function numberOnlyEvent(event){
+            return event.charCode >= 48 && event.charCode <= 57
+         }
+         function createDivGroup(classList, input, title){
+            if (title == undefined){
+               title = input.placeholder
+            }
+            let div = document.createElement("div")
+            div.classList = classList
+            let label = document.createElement("label")
+            div.appendChild(label)
+            label.classList.add("form-label")
+            label.setAttribute("for", input.id)
+            label.innerHTML = title
+            div.appendChild(input)
+            return div
+         }
+         function createInput(name, placeholder, required){
+            let input = document.createElement("input")
+            input.classList.add("form-control")
+            input.placeholder = placeholder
+            input.name = name
+            input.id="i" + name
+            input.type = "text"
+            
+            if (required!=undefined){
+               input.required = required
+            }
+            return input
+         } 
+         function createInputDate(name, required){
+            let input = createInput(name, undefined, required)
+            input.type = "date"
+            return input
+         }
+         function createSelect(name, options){
+            let input = document.createElement("select")
+            input.classList.add("form-select")
+            input.name = name
+            input.id="i" + name
+            if (options){
+               let option = document.createElement("option")
+               option.text = "Escolha..."
+               option.value=""
+               option.selected = true
+               option.hidden = true
+               input.add(option)
+               for (let s in options){
+                  option = document.createElement("option")
+                  option.text = options[s]
+                  input.add(option)
+               }
+            }
+            return input
+         } 
+         function createGroup(classList, nameEdit, placeholder, title){
+            return createDivGroup(classList, createInput(nameEdit, placeholder), title)
+         } 
+         function CreateButtom(title){
+            let div = document.createElement("div")
+            div.classList = class12
+            let btn = document.createElement("button")
+            div.appendChild(btn)
+            btn.type = "submit"
+            btn.classList = "btn btn-primary"
+            btn.innerHTML = title
+            return div
+         }
+         function arrayBufferToBase64(buffer){
+            var binary = ''
+            var bytes = new Uint8Array(buffer)
+            var len = bytes.byteLength
+            for (var i = 0; i < len; i++){
+               binary += String.fromCharCode(bytes[i])
+            }
+            return window.btoa(binary)
+         }
+         function createCtrlFoto(container){
+            const foto = document.createElement("input")
+            container.appendChild(foto)
+            foto.name = "foto"
+            foto.type = "hidden"
+            const img = document.createElement("img")
+            const imgDlg = createInput()
+            imgDlg.type = "file"
+            imgDlg.accept = "image/png, image/gif, image/jpeg"
+            imgDlg.onchange = function(event){
+               let files = event.target.files
+               if (files.length != 1){
+                  //alert('Selecione um arquivo')
+                  return
+               }
+               let file=files[0]
+               if (file.size > 3 * 1024 * 1024){
+                  alert('Ficheiro demasiado grande')
+                  return
+               }
+               img.src = URL.createObjectURL(file)
+               var reader = new FileReader()
+               reader.onload = function(e){
+                  let s = arrayBufferToBase64(reader.result)
+                  foto.value = s.replace(/\+/, "%2B") 
+               }
+               reader.readAsArrayBuffer(file)
+            }
+            img.classList = "img-thumbnail rounded-circle"
+            img.style.maxHeight = "100%"
+            img.alt = "Alterar Foto"
+            img.style.maxWidth = "8.8rem"
+            
+            container.onclick = (event) =>{
+               imgDlg.click()
+            }
+            container.appendChild(img)
+            container.style.cursor = "pointer"
+           // return img
+         }
+         function createHeader(frm){
+            const panel = document.createElement("div")
+            panel.classList = "row gx-3"
+            panel.style.marginLeft = 0
+            panel.style.padding = 0
+            panel.style.width =  "calc(100% - 9rem)"
+            //
+            //let div = document.createElement("div")
+            //panel.appendChild(div)
+            //panel.style.backgroundColor = "red"
+            
+            panel.appendChild(createDivGroup(class12, createInput("Name", "Nome Completo", true)))
+            panel.appendChild(createGroup(class9x, "Morada", "Rua", "Morada"))
+            panel.appendChild(createGroup(class3x,"Porta", "Num,Lt,Andar","Porta"))
+            frm.appendChild(panel)
+
+            let div = document.createElement("div")
+            frm.appendChild(div)
+            div.style.width =  "9rem"
+            createCtrlFoto(div)
+            //div.style.backgroundColor="red" 
+            //img.onclick           
+         }
+         let editConj 
+         let nomeConjSaved=""
+         function createComponents(frm){
+            createHeader(frm)
+            const eCodPost = createInput("CodPost", "0000-000")
+            eCodPost.maxLength = 8
+            frm.appendChild(createDivGroup(class3x, eCodPost, "C. Postal"))
+            eCodPost.onkeypress=()=>{
+               let i = eCodPost.value.length
+               if (i == 4){
+                  eCodPost.value += '-'
+               }
+               return true
+            }
+
+            frm.appendChild(createGroup(class9x, "Local", "Localidade"))
+            frm.appendChild(createDivGroup(class3, createInputDate("DtNac", true), "Data Nascimento"))
+
+            let edit = createSelect("Sexo", ["Masculino", "Feminino"], ["MASCULINO", "FEMININO"])
+            frm.appendChild(createDivGroup(class3, edit, "Sexo"))
+            
+            edit = createInput("Telemovel", "Telemóvel")
+            edit.maxLength = 9
+            edit.onkeypress = numberOnlyEvent
+            frm.appendChild(createDivGroup(class3, edit))
+
+            frm.appendChild(createGroup(class3, "bIdent", "B. Identidade"))
+            frm.appendChild(createGroup(class3, "Contrib", "Contribuinte"))
+            frm.appendChild(createGroup(class3, "Func", "Membro,Secretario,Levita", "Funcão"))
+            frm.appendChild(createGroup(class3, "Congrega", "Congregação"))
+            frm.appendChild(createGroup(class3, "Nacional", "Nacionalidade"))
+
+            edit = createSelect("SitReligiosa", ["EM COMUNHÃO", "NOVO CONVERTIDO"])
+            frm.appendChild(createDivGroup(class4s, edit, "Situação Religiosa"))
+            
+            frm.appendChild(createDivGroup(class4s, createInputDate("Recebido"), "Recebido em"))
+
+            edit = createSelect("Status", ["ATIVO", "INATIVO"])
+            frm.appendChild(createDivGroup(class4s, edit, "Status"))
+
+            edit = createInput("Email", "@email.com")
+            edit.type =  "email"
+            frm.appendChild(createDivGroup(class12, edit, "Email"))
+            
+            let editBat = createInput("AnoBat", "(ex:2000)")
+            editBat.disabled=true 
+            edit = createSelect("Bat", ["SIM", "NÃO"])
+            frm.appendChild(createDivGroup(class3, edit, "Batizado"))
+            edit.onchange=(evt)=>{
+               if(evt.target.value=="SIM"){
+                  editBat.disabled=false
+                  editBat.placeholder="Ano Batismo"
+               }else{
+                  editBat.disabled=true
+                  editBat.placeholder="NÃO"
+                  editBat.value=""
+               }
+            }
+
+            edit = createInput(editBat)
+            edit.maxLength = 4
+            edit.onkeypress = numberOnlyEvent
+            frm.appendChild(createDivGroup(class3, editBat, "Ano Batismo"))
+
+            frm.appendChild(createGroup(class3, "Profiss", "Profissão"))
+
+            editConj = createInput("NomeConj", "Nome Conjuge")
+            editConj.disabled=true
+            edit = createSelect("EstCivil",["CASADO(A)","DIVORCIADO(A)","SOLTEIRO(A)","VIUVO(A)"])
+            frm.appendChild(createDivGroup(class3,edit,"Estado Civil"))
+            edit.onchange=(evt)=>{
+               updateEstadoCivil(evt.target)
+            }
+            
+            frm.appendChild(createDivGroup(class12, editConj))
+            frm.appendChild(createGroup(class12, "NomePai", "Nome Pai"))
+            frm.appendChild(createGroup(class12, "NomeMae", "Nome Mãe"))
+
+            edit = document.createElement("textarea");
+            edit.classList.add("form-control")
+            edit.rows = "1"
+            edit.placeholder = "Observações"
+            edit.name = "textarea"
+            edit.id="i" + edit.name
+            frm.appendChild(createDivGroup(class12, edit))
+            frm.appendChild(CreateButtom("Enviar"))
+         }
+         let frm = document.getElementById("frm")
+         createComponents(frm)
+
+         function updateEstadoCivil(ctrl){
+            if (ctrl.value=="CASADO(A)"){
+               editConj.disabled=false
+               editConj.placeholder="Nome Conjuge"
+               editConj.value=nomeConjSaved
+            }else{
+               editConj.disabled=true
+               nomeConjSaved=editConj.value
+               editConj.value=""
+               editConj.placeholder=ctrl.value 
+            }
+         }
+
+         function reset(){
+               const dados = {};
+
+                  Object.keys(dados).forEach(function(key) {
+                     if (key != "key"){
+                        let a = document.getElementsByName(key)
+                        let value = dados[key]
+                        if (a.length>0){
+                           a[0].value = value
+                        }
+                     }
+                  })
+                  document.getElementById("hNameText").innerHTML=dados.Name
+                  updateEstadoCivil(document.getElementsByName("EstCivil")[0])
+         }
+         reset()
+      </script>
+   </body>
+</html>
